@@ -66,8 +66,10 @@ const LoginPage = () => {
         }
     }
     
-    return <div className="flex gap-5 justify-around items-center w-[75%]">
-        <div className="text-[#3C3C3C] w-[40%] flex flex-col gap-5">
+    return (
+        <div className='w-full h-screen flex items-center justify-center'>
+            <div className="flex gap-5 justify-around items-center w-[75%]">
+        <div className="text-[#3C3C3C] w-full sm:w-[40%] flex flex-col gap-5">
             <h1 className="noto-sans-700 text-2xl">Sign In</h1>
             <div className="flex gap-2">
                 <p className="noto-sans-700">New User?</p>
@@ -102,10 +104,12 @@ const LoginPage = () => {
                 </div>
             </div>
         </div>
-        <div>
+        <div className="hidden sm:block">
             <img src="https://picsum.photos/200/300" />
         </div>
     </div>
+        </div>
+    )
 }
 
 export default LoginPage
