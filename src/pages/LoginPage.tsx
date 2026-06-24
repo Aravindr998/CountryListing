@@ -42,7 +42,7 @@ const LoginPage = () => {
 
     const handleValidate = () => {
         let hasErrors = false
-        let error: Record<string, string> = {}
+        const error: Record<string, string> = {}
         if (!formData.username.trim()) {
             hasErrors = true
             error.username = "Username cannot be empty"

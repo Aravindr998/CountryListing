@@ -7,7 +7,13 @@ const HomePage = () => {
     return <div className="p-20">
         <Header />
         <Welcome />
-        <HomeSlider />
+        <div className="mt-5 grid grid-cols-1 items-stretch gap-3 sm:grid-cols-[4fr_1fr]">
+            <HomeSlider />
+            <img
+                src="https://picsum.photos/200/100"
+                className="order-first w-full object-cover sm:order-0"
+            />
+        </div>
         <CountryList />
     </div>
 }
