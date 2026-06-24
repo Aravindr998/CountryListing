@@ -6,12 +6,11 @@ const HomeSlider = () => {
     const [scrollSnaps, setScrollSnaps] = useState([])
 
 
-    const scrollTo = (index) => emblaApi?.scrollTo(index)
-    const setupSnaps = (emblaApi) => setScrollSnaps(emblaApi.scrollSnapList())
+    const scrollTo = (index: number) => emblaApi?.scrollTo(index)
+    const setupSnaps = (emblaApi: any) => setScrollSnaps(emblaApi.scrollSnapList())
 
     useEffect(() => {
         if (!emblaApi) return
-
         setupSnaps(emblaApi)
         emblaApi.on('reInit', setupSnaps)
     }, [emblaApi])
@@ -38,7 +37,7 @@ const HomeSlider = () => {
             </div>
 
             <div className='absolute bottom-0 left-[50%] translate-x-[-50%] flex gap-2 text-red-500'>
-                <button className="embla__prev" onClick={goToPrev}>Scroll to prev</button>
+                <button className="embla__prev" onClick={goToPrev}>{"<-"}</button>
                 <div className="embla__dots flex gap-2">
                     {scrollSnaps.map((_, index) => (
                         <button
@@ -50,7 +49,7 @@ const HomeSlider = () => {
                         </button>
                     ))}
                 </div>
-                <button className="embla__next" onClick={goToNext}>Scroll to next</button>
+                <button className="embla__next" onClick={goToNext}>{"->"}</button>
 
             </div>
         </div>

@@ -1,41 +1,29 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import type { Country } from "../../types/api.types"
 
-const initialState = {
-    countries: [],
-    loading: false,
-    filter: "all"
+interface CountryInitialState {
+    countries: Country[];
+    loading: boolean
 }
 
-export const fetchCountries = createAsyncThunk("country/fetchCountries", async(offset: number, thunkApi) => {
-    let url = `https://api.restcountries.com/countries/v5?response_fields=names.common%2Cregion%2Cflag.url_png&limit=24&offset=${offset}`
-    const filter = thunkApi.getState().country?.filter
-    console.log(filter, "filter")
-    if (filter !== "all") {
-        url+= `?region=${filter}`
-    }
-    const response = await fetch(url, {
-        headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_REST_COUNTRIES_API_KEY}`
-        }
-    })
-    const data = await response.json()
-    return data
-})
+const initialState: CountryInitialState = {
+    countries: [],
+    loading: false,
+}
 
-export const loadMoreCountries = createAsyncThunk("country/loadMoreCountries", async(offset: number) => {
-    let url = `https://api.restcountries.com/countries/v5?response_fields=names.common%2Cregion%2Cflag.url_png&limit=24&offset=${offset}`
-    const filter = thunkApi.getState().country?.filter
-    if (filter !== "all") {
-        url+= `?region=${filter}`
+const getCountries = async ({offset, filter}: {offset: number, filter: string | null}) => {
+    let url = `https://countries.dev/countries?fields=name,flags,region&limit=10&offset=${offset}`
+    if (filter && filter !== "all") {
+        url = `https://countries.dev/region/${filter}?fields=name,flags,region&limit=10&offset=${offset}`
     }
-    const response = await fetch(url, {
-        headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_REST_COUNTRIES_API_KEY}`
-        }
-    })
-    const data = await response.json()
+    const response = await fetch(url)
+    const data: Country[] = await response.json()
     return data
-})
+}
+
+export const fetchCountries = createAsyncThunk("country/fetchCountries", getCountries)
+
+export const loadMoreCountries = createAsyncThunk("country/loadMoreCountries", getCountries)
 
 const countrySlice = createSlice({
     name: "country",
@@ -43,15 +31,12 @@ const countrySlice = createSlice({
     reducers: {
         clearCountries: (state) => {
             state.countries = []
-        },
-        setFilter: (state, action) => {
-            state.filter = action.payload
         }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchCountries.fulfilled, (state, action) => {
             state.loading = false
-            state.countries = action.payload.data.objects
+            state.countries = action.payload
         })
         builder.addCase(fetchCountries.pending, (state) => {
             state.loading = true
@@ -61,7 +46,7 @@ const countrySlice = createSlice({
         })
         builder.addCase(loadMoreCountries.fulfilled, (state, action) => {
             state.loading = false
-            state.countries = [...state.countries, ...action.payload.data.objects]
+            state.countries = [...state.countries, ...action.payload]
         })
         builder.addCase(loadMoreCountries.pending, (state) => {
             state.loading = true
@@ -72,5 +57,5 @@ const countrySlice = createSlice({
     }
 })
 
-export const { clearCountries, setFilter } = countrySlice.actions
+export const { clearCountries } = countrySlice.actions
 export default countrySlice.reducer
