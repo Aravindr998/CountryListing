@@ -11,7 +11,7 @@ const Header = () => {
 
     return(
         <div className="text-[#3D3D3D] fixed top-0 left-0 right-0 h-15 flex justify-between z-10 bg-white pb-5 px-20">
-            <p className="noto-sans-700 text-xl">Countries</p>
+            <p className="noto-sans-700 text-xl p-2">Countries</p>
             <div className="flex gap-5">
                 <button className={`${filter === "all" ? selectedClass : ""} flex-1 py-5 pe-5`} onClick={() => handleClick("all")}>
                     All
